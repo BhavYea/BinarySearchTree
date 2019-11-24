@@ -81,6 +81,7 @@ public class BinarySearchTree {
         f.add(canvas, BorderLayout.CENTER);
         f.add(mypanel, BorderLayout.NORTH);
         f.add(lastpanel, BorderLayout.PAGE_END);
+
         //Listeners
         insert.addActionListener(new ActionListener() {
             @Override
@@ -130,6 +131,7 @@ public class BinarySearchTree {
                 if (find(Integer.parseInt(number.getText()))) {
                     printfield.setText("Number found");
                 } else {
+                    foundNode = null;
                     printfield.setText("Number not found");
                     found = false;
                 }
@@ -200,6 +202,7 @@ public class BinarySearchTree {
     }
 
     public boolean delete(int id) {
+        Stack<Node> temp = new Stack<>();
 
         Node parent = root;
         Node current = root;
@@ -218,6 +221,7 @@ public class BinarySearchTree {
             }
         }
         //if i am here that means we have found the node
+        temp.push(current);
         //Case 1: if node to be deleted has no children
         if (current.left == null && current.right == null) {
             if (current == root) {
@@ -232,29 +236,110 @@ public class BinarySearchTree {
         else if (current.right == null) {
             if (current == root) {
                 root = current.left;
-
             } else if (isLeftChild) {
+                while (!temp.isEmpty()) {
+                    Node trNode = temp.peek();
+                    temp.pop();
+
+                    trNode.Nx += 60;
+                    trNode.Ny -= 50;
+
+                    if (trNode.left != null) {
+                        temp.push(trNode.left);
+                    }
+                    if (trNode.right != null) {
+                        temp.push(trNode.right);
+                    }
+                }
                 parent.left = current.left;
             } else {
+                while (!temp.isEmpty()) {
+                    Node trNode = temp.peek();
+                    temp.pop();
+
+                    trNode.Nx += 60;
+                    trNode.Ny -= 50;
+
+                    if (trNode.left != null) {
+                        temp.push(trNode.left);
+                    }
+                    if (trNode.right != null) {
+                        temp.push(trNode.right);
+                    }
+                }
                 parent.right = current.left;
             }
         } else if (current.left == null) {
             if (current == root) {
                 root = current.right;
             } else if (isLeftChild) {
+                while (!temp.isEmpty()) {
+                    Node trNode = temp.peek();
+                    temp.pop();
+
+                    trNode.Nx -= 60;
+                    trNode.Ny -= 50;
+
+                    if (trNode.left != null) {
+                        temp.push(trNode.left);
+                    }
+                    if (trNode.right != null) {
+                        temp.push(trNode.right);
+                    }
+                }
                 parent.left = current.right;
             } else {
+                while (!temp.isEmpty()) {
+                    Node trNode = temp.peek();
+                    temp.pop();
+
+                    trNode.Nx -= 60;
+                    trNode.Ny -= 50;
+
+                    if (trNode.left != null) {
+                        temp.push(trNode.left);
+                    }
+                    if (trNode.right != null) {
+                        temp.push(trNode.right);
+                    }
+                }
+
                 parent.right = current.right;
             }
         } else if (current.left != null && current.right != null) {
 
             //now we have found the minimum element in the right sub tree
             Node successor = getSuccessor(current);
+            System.out.println(successor.data);
             if (current == root) {
                 root = successor;
             } else if (isLeftChild) {
+                successor.Nx = current.Nx;
+                successor.Ny = current.Ny;
+                while (!temp.isEmpty()) {
+                    Node trNode = temp.peek();
+                    temp.pop();
+                    if (trNode.left != null) {
+                        temp.push(trNode.left);
+                    }
+                    if (trNode.right != null) {
+                        temp.push(trNode.right);
+                    }
+                }
                 parent.left = successor;
             } else {
+                successor.Nx = current.Nx;
+                successor.Ny = current.Ny;
+                while (!temp.isEmpty()) {
+                    Node trNode = temp.peek();
+                    temp.pop();
+                    if (trNode.left != null) {
+                        temp.push(trNode.left);
+                    }
+                    if (trNode.right != null) {
+                        temp.push(trNode.right);
+                    }
+                }
                 parent.right = successor;
             }
             successor.left = current.left;
@@ -264,8 +349,6 @@ public class BinarySearchTree {
         HeightN.setText(getheight(root) + "");
         System.out.println(getheight(root));
         noOfNodesN.setText(nodeCount + "");
-
-        updatexy();
 
         return true;
     }
@@ -306,6 +389,7 @@ public class BinarySearchTree {
 //            f.add(new Circle(root.Nx, root.Ny, root.data));
             return;
         }
+
         Node current = root;
         Node parent = null;
         while (true) {
@@ -340,6 +424,7 @@ public class BinarySearchTree {
         }
     }
 
+    //Used in PRINT function
     public void display(Node root) {
         if (root != null) {
             display(root.left);
@@ -363,32 +448,9 @@ public class BinarySearchTree {
 //        BinarySearchTree b = new BinarySearchTree();
 //        f.add(new drawStuff());
 //    }
+    //MAIN FUNCTION
     public static void main(String arg[]) {
-
         b = new BinarySearchTree();
-
-//        b.insert(3);
-//        b.insert(8);
-//        b.insert(1);
-//        b.insert(4);
-//        b.insert(6);
-//        b.insert(2);
-//        b.insert(10);
-//        b.insert(9);
-//        b.insert(20);
-//        b.insert(25);
-//        b.insert(15);
-//        b.insert(16);
-//        System.out.println("Original Tree : ");
-//        b.display(b.root);
-//        System.out.println("");
-//        System.out.println("Check whether Node with value 4 exists : " + b.find(4));
-//        System.out.println("Delete Node with no children (2) : " + b.delete(2));
-//        b.display(root);
-//        System.out.println("\n Delete Node with one child (4) : " + b.delete(4));
-//        b.display(root);
-//        System.out.println("\n Delete Node with Two children (10) : " + b.delete(10));
-//        b.display(root);
     }
 
     int getheight(Node node) {
@@ -403,28 +465,30 @@ public class BinarySearchTree {
     }
 
     void updatexy() {
-        Stack<Node> nodestack = new Stack<>();
-        nodestack.push(root);
-        while (nodestack.isEmpty() == false) {
-            Node mynode = nodestack.peek();
-            System.out.println("going");
+//        Stack<Node> nodestack = new Stack<>();
+//        nodestack.push(root);
+//        while (nodestack.isEmpty() == false) {
+//            Node mynode = nodestack.peek();
+//            System.out.println("going");
+//
+//            nodestack.pop();
+//
+//            if (mynode.right != null) {
+//                mynode.right.Nx = mynode.Nx + 60;
+//                mynode.right.Ny = mynode.Ny + 50;
+//                nodestack.push(mynode.right);
+//            }
+//
+//            if (mynode.left != null) {
+//                mynode.left.Nx = mynode.Nx - 60;
+//                mynode.right.Ny = mynode.Ny + 50;
+//                nodestack.push(mynode.left);
+//            }
+//        }
 
-            nodestack.pop();
-
-            if (mynode.right != null) {
-                mynode.right.Nx = mynode.Nx + 60;
-                mynode.right.Ny = mynode.Ny + 50;
-                nodestack.push(mynode.right);
-            }
-
-            if (mynode.left != null) {
-                mynode.left.Nx = mynode.Nx - 60;
-                mynode.right.Ny = mynode.Ny + 50;
-                nodestack.push(mynode.left);
-            }
-        }
     }
 
+    //Drawstuff is the Class for Canvas, or tree Display on screen
     class drawStuff extends JPanel {
 
         Node drawroot;
@@ -476,6 +540,7 @@ public class BinarySearchTree {
     }
 }
 
+//Node Class
 class Node {
 
     int data;
