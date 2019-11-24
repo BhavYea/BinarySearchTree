@@ -21,6 +21,7 @@ import java.util.*;
 public class BinarySearchTree {
 
     static int height = 0;
+    int j;
     static int nodeCount = 0;
 
     static BinarySearchTree b;
