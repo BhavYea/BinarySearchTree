@@ -382,7 +382,7 @@ class drawStuff extends JPanel {
 
     void getfound(boolean found, Node foundNode) {
         check = found;
-        System.out.println(found + "of getfound");
+        System.out.println(found + " of getfound");
         foundval = foundNode;
         System.out.println(foundval.data);
     }
@@ -392,6 +392,7 @@ class drawStuff extends JPanel {
         super.paintComponent(g);
 //        System.out.println("Hello");
         while (nodestack.isEmpty() == false) {
+            System.out.println("\n\n"+nodestack);
             //print the number on screen
             Node mynode = nodestack.peek();
             System.out.println("check = " + check);
@@ -403,6 +404,8 @@ class drawStuff extends JPanel {
                     g.setColor(Color.BLACK);
                     g.drawString(Integer.toString(mynode.data), mynode.Nx, mynode.Ny);
                 }
+
+                check = false;
             } else {
                 g.setColor(Color.yellow);
                 g.fillOval(mynode.Nx - 20, mynode.Ny - 27, 50, 50);
